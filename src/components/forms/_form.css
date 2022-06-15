@@ -1,0 +1,54 @@
+form {
+  background-color: gainsboro;
+  display: inline-block;
+  padding: 1.5rem 1.5rem;
+  margin: 1rem;
+}
+
+input {
+  height: 25px;
+}
+
+.form-group {
+  margin-top: 1rem;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+}
+
+.error-wrapper {
+  margin-top: 1rem;
+  background-color: #ff4040;
+  padding: 10px;
+  color: white;
+}
+
+.success-wrapper {
+  margin-top: 1rem;
+  background-color: #1dbc60;
+  padding: 10px;
+  color: white;
+}
+
+.checkbox-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-wrapper > input {
+  margin: 0;
+  margin-right: 0.25rem;
+}
+
+.form-group div {
+  display: flex;
+}
+
+.login-form .btn-pword {
+  all: unset;
+  cursor: pointer;
+  margin-left: -2rem;
+}

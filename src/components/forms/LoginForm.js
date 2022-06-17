@@ -1,15 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import { useLogger } from "react-use";
 
 import "./_form.css";
 
-const LoginForm = () => {
+const initialValue = {
+  user: "",
+  password: ""
+};
+
+const UnmemoizedLoginForm = () => {
+  useLogger("LoginForm");
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
   const [show, setShow] = useState(false);
+  const [value, setValue] = useState(initialValue);
 
-  const toggleShow = () => {
+  // const {user, password} = value;
+
+  const toggleShow = useCallback(() => {
     setShow((prev) => !prev);
-  };
+  }, []);
+
+  const handleChange = useCallback((name) => {
+    return (e) =>
+      setValue((prev) => ({
+        ...prev,
+        [name]: e.target.value
+      }));
+  }, []);
+
+  console.log("value -->", value);
 
   return (
     <div>
@@ -27,12 +47,16 @@ const LoginForm = () => {
         )}
         <div className="form-group">
           <label htmlFor="user">Username/Email*</label>
-          <input id="user" type="text" />
+          <input id="user" type="text" onChange={handleChange("user")} />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password*</label>
           <div className="password-input__group">
-            <input id="password" type={show ? "text" : "password"} />
+            <input
+              id="password"
+              type={show ? "text" : "password"}
+              onChange={handleChange("password")}
+            />
             <button type="button" className="btn-pword" onClick={toggleShow}>
               {show && (
                 <span className="material-symbols-outlined">visibility</span>
@@ -58,8 +82,6 @@ const LoginForm = () => {
   );
 };
 
+const LoginForm = React.memo(UnmemoizedLoginForm);
+
 export default LoginForm;
-
-/*
-
-*/

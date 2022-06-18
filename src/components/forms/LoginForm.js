@@ -1,25 +1,25 @@
 import React, { useState, useCallback } from "react";
 import { useLogger } from "react-use";
+import useToggle from "../../hooks/useToggle";
+import axios from "../../api/axios";
 
 import "./_form.css";
+import { useAuth } from "../../hooks/useAuth";
 
 const initialValue = {
-  user: "",
-  password: ""
+  user: "bchittock0@washingtonpost.com",
+  password: "sUDtNo"
 };
 
 const UnmemoizedLoginForm = () => {
   useLogger("LoginForm");
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
-  const [show, setShow] = useState(false);
+  const [show, handleToggle] = useToggle();
   const [value, setValue] = useState(initialValue);
+  const { auth, setAuth } = useAuth();
 
-  // const {user, password} = value;
-
-  const toggleShow = useCallback(() => {
-    setShow((prev) => !prev);
-  }, []);
+  const { user, password } = value;
 
   const handleChange = useCallback((name) => {
     return (e) =>
@@ -29,11 +29,19 @@ const UnmemoizedLoginForm = () => {
       }));
   }, []);
 
-  console.log("value -->", value);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/login", value);
+      console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   return (
     <div>
-      <form className="login-form">
+      <form className="login-form" onSubmit={handleSubmit}>
         <h4>Login</h4>
         {error && (
           <div className="error-wrapper">
@@ -47,17 +55,23 @@ const UnmemoizedLoginForm = () => {
         )}
         <div className="form-group">
           <label htmlFor="user">Username/Email*</label>
-          <input id="user" type="text" onChange={handleChange("user")} />
+          <input
+            value={user}
+            id="user"
+            type="text"
+            onChange={handleChange("user")}
+          />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password*</label>
           <div className="password-input__group">
             <input
+              value={password}
               id="password"
               type={show ? "text" : "password"}
               onChange={handleChange("password")}
             />
-            <button type="button" className="btn-pword" onClick={toggleShow}>
+            <button type="button" className="btn-pword" onClick={handleToggle}>
               {show && (
                 <span className="material-symbols-outlined">visibility</span>
               )}

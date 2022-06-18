@@ -8,7 +8,7 @@ const Home = () => {
   const logout = async () => {
     // if used in more components, this should be in context
     // axios to /logout endpoint
-    setAuth({});
+    setAuth(null);
     navigate("/linkpage");
   };
 

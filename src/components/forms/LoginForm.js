@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from "react";
-import { useLogger } from "react-use";
+import React, { useState, useCallback, useEffect } from "react";
+// import { useLogger } from "react-use";
 import useToggle from "../../hooks/useToggle";
 import axios from "../../api/axios";
 
 import "./_form.css";
 import { useAuth } from "../../hooks/useAuth";
+import Loader from "../spinner/Loader";
+import useAxios from "../../hooks/useAxios";
 
 const initialValue = {
   user: "bchittock0@washingtonpost.com",
@@ -12,14 +14,12 @@ const initialValue = {
 };
 
 const UnmemoizedLoginForm = () => {
-  useLogger("LoginForm");
-  const [success, setSuccess] = useState();
-  const [error, setError] = useState();
+  // useLogger("LoginForm");
   const [show, handleToggle] = useToggle();
   const [value, setValue] = useState(initialValue);
   const { auth, setAuth } = useAuth();
-
   const { user, password } = value;
+  const [response, loading, error, success, getResponse] = useAxios();
 
   const handleChange = useCallback((name) => {
     return (e) =>
@@ -29,15 +29,24 @@ const UnmemoizedLoginForm = () => {
       }));
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("/login", value);
-      console.log(response);
-    } catch (err) {
-      console.log(err.message);
-    }
+    const configObj = {
+      axiosInstance: axios,
+      url: "/login",
+      method: "POST",
+      data: value
+    };
+    getResponse(configObj);
   };
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted && response) {
+      setAuth(response);
+    }
+    return () => (isMounted = false);
+  }, [response]);
 
   return (
     <div>
@@ -89,7 +98,7 @@ const UnmemoizedLoginForm = () => {
         </label>
 
         <button type="submit" className="btn mt-1">
-          submit
+          Submit {loading && <Loader size={5} />}
         </button>
       </form>
     </div>

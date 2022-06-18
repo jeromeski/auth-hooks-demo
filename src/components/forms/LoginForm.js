@@ -7,6 +7,7 @@ import "./_form.css";
 import { useAuth } from "../../hooks/useAuth";
 import Loader from "../spinner/Loader";
 import useAxios from "../../hooks/useAxios";
+import { API_ENDPOINTS } from "../../api/api-endpoints";
 
 const initialValue = {
   user: "bchittock0@washingtonpost.com",
@@ -33,7 +34,7 @@ const UnmemoizedLoginForm = () => {
     e.preventDefault();
     const configObj = {
       axiosInstance: axios,
-      url: "/login",
+      url: API_ENDPOINTS.LOGIN,
       method: "POST",
       data: value
     };
@@ -46,7 +47,12 @@ const UnmemoizedLoginForm = () => {
       setAuth(response);
     }
     return () => (isMounted = false);
+    // eslint-disable-next-line no-use-before-define
   }, [response]);
+
+  useEffect(() => {
+    //
+  }, []);
 
   return (
     <div>
@@ -98,7 +104,13 @@ const UnmemoizedLoginForm = () => {
         </label>
 
         <button type="submit" className="btn mt-1">
-          Submit {loading && <Loader size={5} />}
+          {loading ? (
+            <React.Fragment>
+              Connecting... <Loader size={5} />
+            </React.Fragment>
+          ) : (
+            <React.Fragment>Submit</React.Fragment>
+          )}
         </button>
       </form>
     </div>

@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Loader from "../spinner/Loader";
 import useAxios from "../../hooks/useAxios";
 import { API_ENDPOINTS } from "../../api/api-endpoints";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const initialValue = {
   user: "bchittock0@washingtonpost.com",
@@ -21,6 +22,11 @@ const UnmemoizedLoginForm = () => {
   const { auth, setAuth } = useAuth();
   const { user, password } = value;
   const [response, loading, error, success, getResponse] = useAxios();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  // console.log(location)
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = useCallback((name) => {
     return (e) =>
@@ -51,8 +57,10 @@ const UnmemoizedLoginForm = () => {
   }, [response]);
 
   useEffect(() => {
-    //
-  }, []);
+    if (auth) {
+      navigate(from, { replace: true });
+    }
+  }, [auth]);
 
   return (
     <div>

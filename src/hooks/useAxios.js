@@ -7,7 +7,7 @@ const useAxios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
-  const getResponse = async (configObj, value) => {
+  const getResponse = async (configObj) => {
     const { axiosInstance, url, method, requestConfig = {}, data } = configObj;
     setError("");
     setSuccess("");
@@ -15,15 +15,11 @@ const useAxios = () => {
     try {
       const ctrl = new AbortController();
       setController(ctrl);
-      const res = await axiosInstance[method.toLowerCase()](
-        url,
-        {
-          ...requestConfig,
-          signal: ctrl.signal,
-          ...data
-        },
-        value
-      );
+      const res = await axiosInstance[method.toLowerCase()](url, {
+        ...requestConfig,
+        signal: ctrl.signal,
+        ...data
+      });
       setResponse(res.data);
       setIsLoading(false);
       setSuccess(true);

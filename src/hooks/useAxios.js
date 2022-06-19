@@ -10,7 +10,7 @@ const useAxios = () => {
   const getResponse = async (configObj) => {
     const { axiosInstance, url, method, requestConfig = {}, data } = configObj;
     setError("");
-    setSuccess("");
+    setSuccess(false);
     setIsLoading(true);
     try {
       const ctrl = new AbortController();

@@ -1,11 +1,9 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useLogger } from "react-use";
-import { useAuth } from "../hooks/useAuth";
+// import { useLogger } from "react-use";
+import useAuth from "../hooks/useAuth";
 
 const RequireAuth = ({ allowedRoles }) => {
   const { auth } = useAuth();
-  useLogger("RequireAuth -->");
-  console.log(auth);
 
   const location = useLocation();
 

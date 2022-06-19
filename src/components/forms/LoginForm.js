@@ -4,7 +4,7 @@ import useToggle from "../../hooks/useToggle";
 import axios from "../../api/axios";
 
 import "./_form.css";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import Loader from "../spinner/Loader";
 import useAxios from "../../hooks/useAxios";
 import { API_ENDPOINTS } from "../../api/api-endpoints";
